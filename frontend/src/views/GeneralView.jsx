@@ -34,6 +34,8 @@ export default function GeneralView() {
             categoryName?.toUpperCase()
     );
 
+    console.log(linkInfo);
+
     useEffect(() => {
         setSelectedSubcategory(linkInfo?.toLowerCase());
     }, [linkInfo]);
@@ -69,7 +71,10 @@ export default function GeneralView() {
                 {filteredCategory?.subcategories.map((subcategory, index) => (
                     <button
                         key={index}
-                        onClick={() => setSelectedSubcategory(subcategory.name)}
+                        onClick={() => {
+                            setSelectedSubcategory(subcategory.name);
+                            console.log(subcategory.name, selectedSubcategory);
+                        }}
                         className={`text-[16px] border-y border-[#EAEAEA] py-2 w-full text-left ${
                             subcategory.name === selectedSubcategory
                                 ? "font-bold"

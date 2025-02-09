@@ -29,7 +29,16 @@ export default function Navbar() {
     const tinyMenuRef = useRef(null);
     const loginRef = useRef(null);
 
-    const { setLinkInfo, categoryInfo, logos } = useStateContext();
+    const {
+        setLinkInfo,
+        categoryInfo,
+        logos,
+        setUserToken,
+        userToken,
+        userInfo,
+        contactInfo,
+        productInfo,
+    } = useStateContext();
 
     function removeAccents(str) {
         return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -64,9 +73,6 @@ export default function Navbar() {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
-
-    const { setUserToken, userToken, userInfo, contactInfo, productInfo } =
-        useStateContext();
 
     const onSubmit = (ev) => {
         ev.preventDefault();
@@ -118,7 +124,9 @@ export default function Navbar() {
                 order_value: category.order_value,
                 subHref: category.subcategories.map((subcategory) => ({
                     title: subcategory.name,
-                    href: `/inicio/${category.name.toLowerCase()}/${subcategory.name.toLowerCase()}`,
+                    href: `/inicio/${removeAccents(
+                        category.name.toLowerCase().split(" ").join("-")
+                    )}`,
                 })),
             })),
         ]);
@@ -326,6 +334,7 @@ export default function Navbar() {
                     {userToken && (
                         <div className="h-full relative">
                             <button
+                                type="button"
                                 onClick={() => setUserLoged(!userLoged)}
                                 className="w-[139px] h-full flex justify-center items-center bg-white"
                             >
@@ -354,8 +363,9 @@ export default function Navbar() {
                                             SECCION PRIVADA
                                         </Link>
                                         <button
+                                            onClick={() => setUserToken("")}
                                             className="bg-primary-red text-white text-center px-4 py-2"
-                                            to={"/privado"}
+                                            type="button"
                                         >
                                             CERRAR SESION
                                         </button>
@@ -422,7 +432,7 @@ export default function Navbar() {
                                             initial={{ height: 0 }}
                                             animate={{ height: "fit-content" }}
                                             exit={{ height: 0 }}
-                                            className="absolute flex flex-col top-6 left-0 bg-[#CBCBCB] shadow-md font-roboto-condensed w-[200px] h-fit z-40 overflow-hidden"
+                                            className="absolute flex flex-col top-6 left-0 bg-[#CBCBCB] shadow-md font-roboto-condensed w-[200px] h-fit z-40 overflow-hidden max-h-[600px] overflow-y-auto"
                                         >
                                             {drop.subHref.map((sub) => (
                                                 <Link
@@ -563,7 +573,7 @@ export default function Navbar() {
                                                                         sub.title
                                                                     }
                                                                     to={
-                                                                        "/inicio/terminales-y-accesorios"
+                                                                        sub.href
                                                                     }
                                                                 >
                                                                     {sub.title}

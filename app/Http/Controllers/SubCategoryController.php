@@ -66,8 +66,9 @@ class SubCategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(SubCategory $subCategory)
+    public function destroy($id)
     {
+        $subCategory = SubCategory::findOrFail($id);
         $subCategory->delete();
         return response('', 204);
     }

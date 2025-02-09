@@ -125,6 +125,7 @@ export default function SubCategoryAdminCard({ subCategory }) {
                                 Cancelar
                             </button>
                             <button
+                                type="button"
                                 className="bg-red-500 text-white px-2 py-1"
                                 onClick={deleteSubCategory}
                             >

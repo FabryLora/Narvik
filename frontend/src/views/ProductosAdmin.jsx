@@ -41,7 +41,9 @@ export default function ProductosAdmin() {
                 subCategoryId ? subCategoryId : null
             );
             prodData.append("description", description);
+
             prodData.append("image", image);
+
             prodData.append("file", file);
 
             // 1. Crear el producto
@@ -160,13 +162,21 @@ export default function ProductosAdmin() {
                                                 aria-hidden="true"
                                                 className="mx-auto size-12 text-gray-300"
                                             />
-                                            <div className=" flex text-sm/6 text-gray-600">
+                                            <div className=" flex items-center gap-2 text-sm/6 text-gray-600">
+                                                <label
+                                                    className="cursor-pointer text-white bg-indigo-600 px-3 py-1.5 rounded-md"
+                                                    htmlFor="portada"
+                                                >
+                                                    Elegir imagen
+                                                </label>
+                                                {images[0]?.name}
                                                 <input
                                                     accept="image/*"
-                                                    id="file-upload"
+                                                    id="portada"
                                                     name="file-upload"
                                                     type="file"
                                                     onChange={handleFileChange}
+                                                    className="hidden"
                                                 />
                                             </div>
                                         </div>
@@ -188,10 +198,17 @@ export default function ProductosAdmin() {
                                                 aria-hidden="true"
                                                 className="mx-auto size-12 text-gray-300"
                                             />
-                                            <div className=" flex text-sm/6 text-gray-600">
+                                            <div className=" flex items-center gap-2 text-sm/6 text-gray-600">
+                                                <label
+                                                    className="cursor-pointer text-white bg-indigo-600 px-3 py-1.5 rounded-md"
+                                                    htmlFor="tecnica"
+                                                >
+                                                    Elegir imagen
+                                                </label>
+                                                {image?.name}
                                                 <input
                                                     accept=""
-                                                    id="image"
+                                                    id="tecnica"
                                                     name="image"
                                                     type="file"
                                                     onChange={(e) =>
@@ -199,6 +216,7 @@ export default function ProductosAdmin() {
                                                             e.target.files[0]
                                                         )
                                                     }
+                                                    className="hidden"
                                                 />
                                             </div>
                                         </div>
@@ -220,10 +238,17 @@ export default function ProductosAdmin() {
                                                 aria-hidden="true"
                                                 className="mx-auto size-12 text-gray-300"
                                             />
-                                            <div className=" flex text-sm/6 text-gray-600">
+                                            <div className=" flex items-center gap-2 text-sm/6 text-gray-600">
+                                                <label
+                                                    className="cursor-pointer text-white bg-indigo-600 px-3 py-1.5 rounded-md"
+                                                    htmlFor="archivo"
+                                                >
+                                                    Elegir Archivo
+                                                </label>
+                                                {file?.name}
                                                 <input
                                                     accept=""
-                                                    id="file"
+                                                    id="archivo"
                                                     name="file"
                                                     type="file"
                                                     onChange={(e) =>
@@ -231,6 +256,7 @@ export default function ProductosAdmin() {
                                                             e.target.files[0]
                                                         )
                                                     }
+                                                    className="hidden"
                                                 />
                                             </div>
                                         </div>

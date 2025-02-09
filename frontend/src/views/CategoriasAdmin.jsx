@@ -90,12 +90,6 @@ export default function CategoriasAdmin() {
                             </tr>
                         </thead>
                         <tbody className=" text-center">
-                            {categoryInfo.map((category) => (
-                                <CategoryAdminCard
-                                    key={category.id}
-                                    category={category}
-                                />
-                            ))}
                             <tr className="h-[80px]">
                                 <td>
                                     <label
@@ -151,6 +145,12 @@ export default function CategoriasAdmin() {
                                     </button>
                                 </td>
                             </tr>
+                            {categoryInfo.map((category) => (
+                                <CategoryAdminCard
+                                    key={category.id}
+                                    category={category}
+                                />
+                            ))}
                         </tbody>
                     </table>
                 </div>
@@ -169,12 +169,6 @@ export default function CategoriasAdmin() {
                             </tr>
                         </thead>
                         <tbody className=" text-center">
-                            {subCategoryInfo.map((category) => (
-                                <SubCategoryAdminCard
-                                    key={category.id}
-                                    subCategory={category}
-                                />
-                            ))}
                             <tr className="h-[80px]" action="">
                                 <td>
                                     <input
@@ -229,6 +223,12 @@ export default function CategoriasAdmin() {
                                     </button>
                                 </td>
                             </tr>
+                            {subCategoryInfo.map((category) => (
+                                <SubCategoryAdminCard
+                                    key={category.id}
+                                    subCategory={category}
+                                />
+                            ))}
                         </tbody>
                     </table>
                 </div>
