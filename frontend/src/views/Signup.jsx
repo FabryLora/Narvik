@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
-import conmanLogo from "../assets/logos/conman-white-logo.png";
 import axiosClient from "../axios";
 import { useStateContext } from "../contexts/ContextProvider";
 

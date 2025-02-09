@@ -9,13 +9,13 @@ export default function SubCategoryAdminCard({ subCategory }) {
     const [edit, setEdit] = useState(false);
 
     const [name, setName] = useState();
-    const [link, setLink] = useState("");
+    const [link, setLink] = useState();
     const [categoria, setCategoria] = useState();
     const [order, setOrder] = useState();
 
     useEffect(() => {
         setName(subCategory?.name);
-
+        setLink(subCategory?.link);
         setOrder(subCategory?.order_value);
         setCategoria(subCategory?.category_id);
     }, [subCategory]);
@@ -25,7 +25,7 @@ export default function SubCategoryAdminCard({ subCategory }) {
         const formData = new FormData();
 
         formData.append("name", name);
-        formData.append("link", "a");
+        formData.append("link", link);
         formData.append("category_id", categoria);
         formData.append("order_value", order);
 
@@ -63,7 +63,7 @@ export default function SubCategoryAdminCard({ subCategory }) {
     return (
         <tr className=" h-[80px] border-y">
             <td>{name}</td>
-
+            <td>{link}</td>
             <td>
                 {
                     categoryInfo.find((category) => category.id === categoria)
@@ -87,6 +87,13 @@ export default function SubCategoryAdminCard({ subCategory }) {
                             type="text"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
+                            className="w-full border py-1 pl-2"
+                        />
+                        <label htmlFor="link">Link</label>
+                        <input
+                            type="text"
+                            value={link}
+                            onChange={(e) => setLink(e.target.value)}
                             className="w-full border py-1 pl-2"
                         />
 
@@ -125,7 +132,6 @@ export default function SubCategoryAdminCard({ subCategory }) {
                                 Cancelar
                             </button>
                             <button
-                                type="button"
                                 className="bg-red-500 text-white px-2 py-1"
                                 onClick={deleteSubCategory}
                             >

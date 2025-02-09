@@ -29,16 +29,7 @@ export default function Navbar() {
     const tinyMenuRef = useRef(null);
     const loginRef = useRef(null);
 
-    const {
-        setLinkInfo,
-        categoryInfo,
-        logos,
-        setUserToken,
-        userToken,
-        userInfo,
-        contactInfo,
-        productInfo,
-    } = useStateContext();
+    const { setLinkInfo, categoryInfo, logos } = useStateContext();
 
     function removeAccents(str) {
         return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -73,6 +64,9 @@ export default function Navbar() {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
+
+    const { setUserToken, userToken, userInfo, contactInfo, productInfo } =
+        useStateContext();
 
     const onSubmit = (ev) => {
         ev.preventDefault();
@@ -124,9 +118,7 @@ export default function Navbar() {
                 order_value: category.order_value,
                 subHref: category.subcategories.map((subcategory) => ({
                     title: subcategory.name,
-                    href: `/inicio/${removeAccents(
-                        category.name.toLowerCase().split(" ").join("-")
-                    )}`,
+                    href: `/inicio/${category.name.toLowerCase()}/${subcategory.name.toLowerCase()}`,
                 })),
             })),
         ]);
@@ -148,11 +140,11 @@ export default function Navbar() {
                 <div className="flex fle-row gap-4 h-full items-center">
                     <div
                         ref={searchBarRef}
-                        className="relative flex flex-row items-center max-sm:justify-end gap-3"
+                        className="relative flex flex-row items-center gap-3"
                     >
                         <AnimatePresence>
                             <div
-                                className={`flex flex-row items-center gap-2 rounded-md max-sm:w-[70%] ${
+                                className={`flex flex-row items-center gap-2 rounded-md ${
                                     search ? "border px-2" : ""
                                 }`}
                             >
@@ -192,7 +184,7 @@ export default function Navbar() {
                                     <img
                                         src={searchIcon}
                                         alt="Buscar"
-                                        className="h-[15px] max-sm:h-[20px] "
+                                        className="h-[15px]"
                                     />
                                 </label>
                             </div>
@@ -203,7 +195,7 @@ export default function Navbar() {
                                     initial={{ opacity: 0, y: -8 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, y: -8 }}
-                                    className="absolute flex flex-col top-8 bg-white shadow-md p-5 font-roboto-condensed w-[367px] h-[439px] z-40 max-sm:-right-44"
+                                    className="absolute flex flex-col top-8 bg-white shadow-md p-5 font-roboto-condensed w-[367px] h-[439px] z-40"
                                 >
                                     <h2 className="font-bold text-[24px] py-5">
                                         Resultados de busqueda
@@ -234,7 +226,6 @@ export default function Navbar() {
                             target="_blanck"
                             href={social.href}
                             rel="noopener noreferrer"
-                            className="max-sm:hidden"
                         >
                             <img src={social.logo} alt="" />
                         </a>
@@ -334,7 +325,6 @@ export default function Navbar() {
                     {userToken && (
                         <div className="h-full relative">
                             <button
-                                type="button"
                                 onClick={() => setUserLoged(!userLoged)}
                                 className="w-[139px] h-full flex justify-center items-center bg-white"
                             >
@@ -363,18 +353,11 @@ export default function Navbar() {
                                             SECCION PRIVADA
                                         </Link>
                                         <button
-                                            onClick={() => setUserToken("")}
                                             className="bg-primary-red text-white text-center px-4 py-2"
-                                            type="button"
+                                            to={"/privado"}
                                         >
                                             CERRAR SESION
                                         </button>
-                                        <Link
-                                            className="bg-primary-red text-white text-center px-4 py-2"
-                                            to={"/actualizar-perfil"}
-                                        >
-                                            ACTUALIZAR PERFIL
-                                        </Link>
                                     </motion.div>
                                 )}
                             </AnimatePresence>
@@ -432,7 +415,7 @@ export default function Navbar() {
                                             initial={{ height: 0 }}
                                             animate={{ height: "fit-content" }}
                                             exit={{ height: 0 }}
-                                            className="absolute flex flex-col top-6 left-0 bg-[#CBCBCB] shadow-md font-roboto-condensed w-[200px] h-fit z-40 overflow-hidden max-h-[600px] overflow-y-auto"
+                                            className="absolute flex flex-col top-6 left-0 bg-[#CBCBCB] shadow-md font-roboto-condensed w-[200px] h-fit z-40 overflow-hidden"
                                         >
                                             {drop.subHref.map((sub) => (
                                                 <Link
@@ -476,7 +459,7 @@ export default function Navbar() {
                 </ul>
                 <button
                     onClick={() => setTinyMenu(!tinyMenu)}
-                    className="w-[20px] h-[20px] absolute left-20 max-sm:left-6 xl:hidden"
+                    className="w-[20px] h-[20px] absolute left-10 xl:hidden"
                 >
                     <img src={barsIcon} alt="" />
                 </button>
@@ -499,12 +482,6 @@ export default function Navbar() {
                                 <img src={xmark} alt="" />
                             </button>
                             <ul className="flex flex-col gap-5 p-10 text-white w-full">
-                                <Link
-                                    className="mx-2 hover:text-gray-600 whitespace-nowrap border-b"
-                                    to={"/inicio/nosotros"}
-                                >
-                                    Nosotros
-                                </Link>
                                 {dropdowns.map((drop) => (
                                     <div
                                         className="relative flex-col justify-between gap-1 items-center p-2"
@@ -512,7 +489,9 @@ export default function Navbar() {
                                     >
                                         <div className="flex flex-row justify-between w-full items-center border-b">
                                             <Link
-                                                onClick={() => setLinkInfo("")}
+                                                onClick={() =>
+                                                    setLinkInfo(categoryInfo)
+                                                }
                                                 className="hover:text-gray-600 whitespace-nowrap"
                                                 to={drop.href}
                                             >
@@ -568,12 +547,12 @@ export default function Navbar() {
                                                                             sub.title
                                                                         )
                                                                     }
-                                                                    className="flex flex-row items-center justify-between mx-5 hover:text-gray-600"
+                                                                    className="flex flex-row items-center justify-between pl-5 hover:text-gray-600"
                                                                     key={
                                                                         sub.title
                                                                     }
                                                                     to={
-                                                                        sub.href
+                                                                        "/inicio/terminales-y-accesorios"
                                                                     }
                                                                 >
                                                                     {sub.title}
@@ -585,24 +564,6 @@ export default function Navbar() {
                                         </AnimatePresence>
                                     </div>
                                 ))}
-                                <Link
-                                    className="border-b mx-2 hover:text-gray-600 whitespace-nowrap"
-                                    to={"/inicio/calidad"}
-                                >
-                                    Calidad
-                                </Link>
-                                <Link
-                                    className="border-b mx-2 hover:text-gray-600 whitespace-nowrap"
-                                    to={"/inicio/nosotros"}
-                                >
-                                    Novedades
-                                </Link>
-                                <Link
-                                    className="mx-2 hover:text-gray-600 whitespace-nowrap border-b"
-                                    to={"/inicio/nosotros"}
-                                >
-                                    Contacto
-                                </Link>
                             </ul>
                         </motion.div>
                     </div>

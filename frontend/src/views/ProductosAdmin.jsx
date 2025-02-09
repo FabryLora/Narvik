@@ -1,5 +1,5 @@
 import { PhotoIcon } from "@heroicons/react/24/solid";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axiosClient from "../axios";
 import ProductRowAdmin from "../components/ProductRowAdmin";
 import { useStateContext } from "../contexts/ContextProvider";
@@ -17,9 +17,6 @@ export default function ProductosAdmin() {
     const [image, setImage] = useState();
     const [file, setFile] = useState();
     const [description, setDescription] = useState();
-
-    const [error, setError] = useState(false);
-    const [succ, setSucc] = useState(false);
 
     const { subCategoryInfo, productInfo, categoryInfo, fetchProductInfo } =
         useStateContext();
@@ -41,9 +38,7 @@ export default function ProductosAdmin() {
                 subCategoryId ? subCategoryId : null
             );
             prodData.append("description", description);
-
             prodData.append("image", image);
-
             prodData.append("file", file);
 
             // 1. Crear el producto
@@ -79,68 +74,16 @@ export default function ProductosAdmin() {
                 productResponse,
                 imageResponse
             );
-            setSucc(true);
+            alert("Producto creado con éxito.");
             fetchProductInfo();
-        } catch (err) {
-            if (err && err.response) {
-                const errorMessages = err.response.data.errors;
-                const messagesArray = [];
-
-                Object.values(errorMessages).forEach((messagesArrayField) => {
-                    messagesArrayField.forEach((message) => {
-                        let translatedMessage = message;
-                        if (message === "The title field is required.") {
-                            translatedMessage =
-                                "El campo título no puede estar vacío.";
-                        } else if (message === "The text field is required.") {
-                            translatedMessage =
-                                "El campo texto no puede estar vacío.";
-                        } else if (message === "The image field is required.") {
-                            translatedMessage =
-                                "El campo imagen no puede estar vacío.";
-                        }
-                        messagesArray.push(translatedMessage);
-                    });
-                });
-                setSucc(false);
-                setError(messagesArray);
-            }
+        } catch (error) {
+            console.error("Error al crear el producto:", error);
+            alert("Hubo un error al crear el producto.");
         }
     };
 
-    useEffect(() => {
-        if (error) {
-            const timer = setTimeout(() => {
-                setError(null);
-            }, 6000);
-            return () => clearTimeout(timer);
-        }
-    }, [error]);
-
-    useEffect(() => {
-        if (succ) {
-            const timer = setTimeout(() => {
-                setSucc(null);
-            }, 4000);
-            return () => clearTimeout(timer);
-        }
-    }, [succ]);
-
     return (
         <div className="relative overflow-x-auto">
-            {error && (
-                <div className="fixed top-10 left-[55%] bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
-                    <p className="font-bold">Error</p>
-                    {error.map((errMsg, index) => (
-                        <p key={index}>{errMsg}</p>
-                    ))}
-                </div>
-            )}
-            {succ && (
-                <div className="fixed top-10 left-[55%] bg-green-100 border-l-4 border-green-500 text-green-700 p-4">
-                    <p className="font-bold">Guardado correctamente</p>
-                </div>
-            )}
             <form
                 onSubmit={handleSubmit}
                 className="p-5 flex flex-col justify-between h-fit"
@@ -162,21 +105,13 @@ export default function ProductosAdmin() {
                                                 aria-hidden="true"
                                                 className="mx-auto size-12 text-gray-300"
                                             />
-                                            <div className=" flex items-center gap-2 text-sm/6 text-gray-600">
-                                                <label
-                                                    className="cursor-pointer text-white bg-indigo-600 px-3 py-1.5 rounded-md"
-                                                    htmlFor="portada"
-                                                >
-                                                    Elegir imagen
-                                                </label>
-                                                {images[0]?.name}
+                                            <div className=" flex text-sm/6 text-gray-600">
                                                 <input
                                                     accept="image/*"
-                                                    id="portada"
+                                                    id="file-upload"
                                                     name="file-upload"
                                                     type="file"
                                                     onChange={handleFileChange}
-                                                    className="hidden"
                                                 />
                                             </div>
                                         </div>
@@ -198,17 +133,10 @@ export default function ProductosAdmin() {
                                                 aria-hidden="true"
                                                 className="mx-auto size-12 text-gray-300"
                                             />
-                                            <div className=" flex items-center gap-2 text-sm/6 text-gray-600">
-                                                <label
-                                                    className="cursor-pointer text-white bg-indigo-600 px-3 py-1.5 rounded-md"
-                                                    htmlFor="tecnica"
-                                                >
-                                                    Elegir imagen
-                                                </label>
-                                                {image?.name}
+                                            <div className=" flex text-sm/6 text-gray-600">
                                                 <input
                                                     accept=""
-                                                    id="tecnica"
+                                                    id="image"
                                                     name="image"
                                                     type="file"
                                                     onChange={(e) =>
@@ -216,7 +144,6 @@ export default function ProductosAdmin() {
                                                             e.target.files[0]
                                                         )
                                                     }
-                                                    className="hidden"
                                                 />
                                             </div>
                                         </div>
@@ -238,17 +165,10 @@ export default function ProductosAdmin() {
                                                 aria-hidden="true"
                                                 className="mx-auto size-12 text-gray-300"
                                             />
-                                            <div className=" flex items-center gap-2 text-sm/6 text-gray-600">
-                                                <label
-                                                    className="cursor-pointer text-white bg-indigo-600 px-3 py-1.5 rounded-md"
-                                                    htmlFor="archivo"
-                                                >
-                                                    Elegir Archivo
-                                                </label>
-                                                {file?.name}
+                                            <div className=" flex text-sm/6 text-gray-600">
                                                 <input
                                                     accept=""
-                                                    id="archivo"
+                                                    id="file"
                                                     name="file"
                                                     type="file"
                                                     onChange={(e) =>
@@ -256,7 +176,6 @@ export default function ProductosAdmin() {
                                                             e.target.files[0]
                                                         )
                                                     }
-                                                    className="hidden"
                                                 />
                                             </div>
                                         </div>
